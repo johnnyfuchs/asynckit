@@ -5,5 +5,11 @@
 
 @import UIKit;
 
-@interface WIEntryCell : UICollectionViewCell
+#import "ASCellNode.h"
+
+@class WIEntry;
+@class ASImageNode;
+
+@interface WIEntryCell : ASCellNode
+@property (nonatomic, strong) WIEntry *entry;
 @end

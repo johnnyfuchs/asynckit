@@ -4,6 +4,18 @@
 //
 
 #import "WIUtil.h"
+#import "AFHTTPRequestOperation.h"
+
+void WILoadImage(NSURL *url, ImageCallback callback) {
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:url]];
+    requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        callback(responseObject, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        callback(nil, error);
+    }];
+    [requestOperation start];
+}
 
 
 @implementation WIUtil {

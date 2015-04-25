@@ -5,6 +5,8 @@
 
 #import "WIEntryListView.h"
 #import "WIEntry.h"
+#import "AFHTTPRequestOperation.h"
+#import "WIEntryCell.h"
 
 @interface WIEntryListView () <ASCollectionViewDelegate, ASCollectionViewDataSource>
 @property (nonatomic, strong) ASCollectionView *collectionView;
@@ -20,6 +22,7 @@
         CGFloat diameter = CGRectGetWidth(frame) / 2;
         UICollectionViewFlowLayout *flowLayout = [UICollectionViewFlowLayout new];
         flowLayout.itemSize = CGSizeMake(diameter, diameter);
+
         self.collectionView = [[ASCollectionView alloc] initWithFrame:self.bounds collectionViewLayout:flowLayout];
         self.collectionView.asyncDataSource = self;
         self.collectionView.asyncDelegate = self;
@@ -40,15 +43,11 @@
     }
 }
 
-
 - (ASCellNode *)collectionView:(ASCollectionView *)collectionView nodeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSString *text = [NSString stringWithFormat:@"[%zd.%zd] says hi", indexPath.section, indexPath.item];
-    ASTextCellNode *node = [[ASTextCellNode alloc] init];
-    WIEntry *entry = self.entries[indexPath.item];
-    node.text = [NSString stringWithFormat:@"%i", entry.uid];
-    node.backgroundColor = [UIColor lightGrayColor];
-
+    WIEntry *entry = self.entries[indexPath.row];
+    WIEntryCell *node = [[WIEntryCell alloc] init];
+    node.entry = entry;
     return node;
 }
 
@@ -56,6 +55,11 @@
 {
     return self.entries.count;
 }
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayNodeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%@", indexPath);
+}
+
 
 - (void)collectionViewLockDataSource:(ASCollectionView *)collectionView
 {
